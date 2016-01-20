@@ -2,4 +2,8 @@
     <string name="app_name">Strava Intervall</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="connect_with_strava">Connect with Strava</string>
+    <string name="full_potential_connect_with_strava_platform">To be able to use StravaIntervall at it\'s full potential you must connect with Strava platform.</string>
+    <string name="strava_intervall_copyright">StravaIntervall. (C) 2016 Cristian Dinu</string>
+    <string name="strava_copyright">Strava and Strava logo. (C) 2016 Strava, Inc.</string>
 </resources>
