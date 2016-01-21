@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:orientation="vertical">
 
     <ImageView
@@ -13,29 +12,33 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingBottom="40dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:text="@string/full_potential_connect_with_strava_platform"
+        android:text="@string/authorization_default_message"
         android:textSize="20sp" />
 
-    <ImageButton
-        android:id="@+id/button_connect_with_strava"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/connect_with_strava"
-        android:contentDescription="@string/connect_with_strava" />
-
-    <View
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+
+        <ImageButton
+            android:id="@+id/button_connect_with_strava"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/connect_with_strava"
+            android:contentDescription="@string/connect_with_strava" />
+    </FrameLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:padding="5dp"
         android:text="@string/strava_intervall_copyright"
         android:textSize="15sp" />
@@ -43,6 +46,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:padding="5dp"
         android:text="@string/strava_copyright"
         android:textSize="15sp" />
