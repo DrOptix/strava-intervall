@@ -7,7 +7,9 @@
     <string name="strava_intervall_copyright">StravaIntervall. © 2016 Cristian Dinu</string>
     <string name="strava_copyright">Strava and Strava logo. © 2016 Strava, Inc.</string>
 
-    <string name="authorization_default_message">Please connect with Strava</string>
+    <string name="authorization_success">Successfully authorized by Strava</string>
+    <string name="authorization_default_message">To be able to use the application you must connect with Strava.</string>
+    <string name="authorization_unable_to_connect">Unable to connect with Strava at the moment.</string>
 
     <!-- Descriptions -->
     <string name="connect_with_strava">Connect with Strava</string>
