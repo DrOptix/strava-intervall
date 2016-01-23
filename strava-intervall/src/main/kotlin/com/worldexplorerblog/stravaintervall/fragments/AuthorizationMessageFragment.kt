@@ -10,8 +10,6 @@ import android.widget.TextView
 import com.worldexplorerblog.stravaintervall.R
 
 class AuthorizationMessageFragment : Fragment() {
-    private val upper = this
-
     public var message = ""
         get
         set
@@ -26,12 +24,12 @@ class AuthorizationMessageFragment : Fragment() {
         val layout = inflater?.inflate(R.layout.authorization_message_fragment, container, false)
 
         with(layout?.findViewById(R.id.message) as TextView) {
-            this.text = upper.message
+            text = message
         }
 
         with(layout?.findViewById(R.id.button_connect_with_strava) as ImageButton) {
-            this.setOnClickListener {
-                upper.onConnectWithStravaClick()
+            setOnClickListener {
+                onConnectWithStravaClick()
             }
         }
 

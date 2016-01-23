@@ -12,39 +12,39 @@ import com.worldexplorerblog.stravaintervall.fragments.AuthorizationOAuthFragmen
 import org.jetbrains.anko.toast
 import java.util.concurrent.ExecutionException
 
-class ActivityAuthorization : FragmentActivity() {
+class AuthorizationActivity : FragmentActivity() {
     var storedToken: String
         get() {
-            return getSharedPreferences(this.getString(R.string.app_name), Context.MODE_PRIVATE)
-                    .getString(this.getString(R.string.token_name), "token")
+            return getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
+                    .getString(getString(R.string.token_name), "token")
         }
         set(value) {
-            getSharedPreferences(this.getString(R.string.app_name), Context.MODE_PRIVATE)
+            getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
                     .edit()
-                    .putString(this.getString(R.string.token_name), value)
+                    .putString(getString(R.string.token_name), value)
                     .commit()
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.setContentView(R.layout.authorization_activity)
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.authorization_activity)
 
         // Check to see if the stored token is valid
         try {
-            val athlete = KotlinStrava(this.storedToken).athlete.get()
-            this.toast(this.getString(R.string.authorization_success))
+            val athlete = KotlinStrava(storedToken).athlete.get()
+            toast(getString(R.string.authorization_success))
 
             // TODO: Load IntervalManagementActivity
         } catch(ex: ExecutionException) {
             val cause: OAuthNotAuthenticatedException? = ex.cause as OAuthNotAuthenticatedException
             if (cause?.javaClass?.isInstance(OAuthNotAuthenticatedException()) as Boolean) {
                 val messageFragment = AuthorizationMessageFragment()
-                messageFragment.message = this.getString(R.string.authorization_default_message)
-                messageFragment.onConnectWithStravaClick = { this.onConnectWithStravaClick() }
+                messageFragment.message = getString(R.string.authorization_default_message)
+                messageFragment.onConnectWithStravaClick = { onConnectWithStravaClick() }
 
-                this.supportFragmentManager.beginTransaction()
+                supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, messageFragment)
                         .commit()
             }
@@ -53,27 +53,27 @@ class ActivityAuthorization : FragmentActivity() {
 
     private fun onConnectWithStravaClick() {
         val oauthFragment = AuthorizationOAuthFragment()
-        oauthFragment.onAuthorizationSuccess = { token -> this.onAuthorizationSuccess(token) }
-        oauthFragment.onAuthorizationFail = { this.onAuthorizationFail() }
+        oauthFragment.onAuthorizationSuccess = { token -> onAuthorizationSuccess(token) }
+        oauthFragment.onAuthorizationFail = { onAuthorizationFail() }
 
-        this.supportFragmentManager.beginTransaction()
+        supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, oauthFragment)
                 .commit()
     }
 
     private fun onAuthorizationSuccess(token: String) {
-        this.storedToken = token
-        this.toast(this.getString(R.string.authorization_success))
+        storedToken = token
+        toast(getString(R.string.authorization_success))
 
         // TODO: load IntervalManagementActivity
     }
 
     private fun onAuthorizationFail() {
         val messageFragment = AuthorizationMessageFragment()
-        messageFragment.message = this.getString(R.string.authorization_default_message)
-        messageFragment.onConnectWithStravaClick = { this.onConnectWithStravaClick() }
+        messageFragment.message = getString(R.string.authorization_default_message)
+        messageFragment.onConnectWithStravaClick = { onConnectWithStravaClick() }
 
-        this.supportFragmentManager.beginTransaction()
+        supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, messageFragment)
                 .commit()
     }
