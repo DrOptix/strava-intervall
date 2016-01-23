@@ -1,9 +1,9 @@
 package com.worldexplorerblog.kotlinstrava.models
 
 data class AthleteSummary(val id: Int,
-                          val firstName: String,
-                          val lastName: String,
-                          val profileMedium: String,
+                          val firstname: String,
+                          val lastname: String,
+                          val profile_medium: String,
                           val profile: String,
                           val city: String,
                           val state: String,
@@ -12,5 +12,5 @@ data class AthleteSummary(val id: Int,
                           val friend: String,
                           val follower: String,
                           val premium: Boolean,
-                          val createdAt: String,
-                          val updatedAt: String)
+                          val created_at: String,
+                          val updated_at: String)
