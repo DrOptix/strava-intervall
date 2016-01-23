@@ -4,6 +4,8 @@
     <string name="token_name">strava_token</string>
 
     <!-- Labels -->
+    <string name="athlete_welcome">, welcome!</string>
+
     <string name="strava_intervall_copyright">StravaIntervall. © 2016 Cristian Dinu</string>
     <string name="strava_copyright">Strava and Strava logo. © 2016 Strava, Inc.</string>
 

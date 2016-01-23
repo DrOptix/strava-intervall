@@ -1,6 +1,7 @@
 package com.worldexplorerblog.stravaintervall.activities
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.view.Window
@@ -31,12 +32,13 @@ class AuthorizationActivity : FragmentActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.authorization_activity)
 
-        // Check to see if the stored token is valid
         try {
-            val athlete = KotlinStrava(storedToken).athlete.get()
+            KotlinStrava(storedToken).athlete.get()
             toast(getString(R.string.authorization_success))
 
-            // TODO: Load IntervalManagementActivity
+            val intent = Intent(this, DashboardActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            startActivity(intent)
         } catch(ex: ExecutionException) {
             val cause: OAuthNotAuthenticatedException? = ex.cause as OAuthNotAuthenticatedException
             if (cause?.javaClass?.isInstance(OAuthNotAuthenticatedException()) as Boolean) {
