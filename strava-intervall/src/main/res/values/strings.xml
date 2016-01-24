@@ -15,4 +15,11 @@
 
     <!-- Descriptions -->
     <string name="connect_with_strava">Connect with Strava</string>
+
+    <string name="warm_up_interval">Warm Up</string>
+    <string name="cool_down_interval">Cool Down</string>
+
+    <string name="low_intensity_interval">Low</string>
+    <string name="medium_intensity_interval">Medium</string>
+    <string name="high_intensity_interval">High</string>
 </resources>
