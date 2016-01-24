@@ -26,11 +26,10 @@
         tools:ignore="HardcodedText" />
 
 
-    <LinearLayout
+    <ImageView
         android:id="@+id/training_program_color_map"
         android:layout_width="fill_parent"
         android:layout_height="12dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
-        tools:ignore="UselessLeaf" />
+        android:orientation="horizontal" />
 </RelativeLayout>
