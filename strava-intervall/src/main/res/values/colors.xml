@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="training_interval_warm_up">#7A9BB3</color>
+    <color name="training_interval_cool_down">#7A9BB3</color>
+
+    <color name="training_interval_low">#84C225</color>
+    <color name="training_interval_medium">#F8C300</color>
+    <color name="training_interval_high">#DA251D</color>
+</resources>
