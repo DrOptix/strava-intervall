@@ -1,10 +1,11 @@
 package com.worldexplorerblog.stravaintervall.models
 
 enum class TrainingIntensity {
-    WarmUpOrCoolDown,
+    WarmUp,
     Low,
     Medium,
-    High
+    High,
+    CoolDown
 }
 
 data class TrainingIntervalModel(var intensity: TrainingIntensity,
