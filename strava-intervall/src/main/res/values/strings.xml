@@ -22,4 +22,10 @@
     <string name="low_intensity_interval">Low</string>
     <string name="medium_intensity_interval">Medium</string>
     <string name="high_intensity_interval">High</string>
+
+    <string name="add_training_interval">Add</string>
+
+    <string name="standard_training_program_name">Standard</string>
+    <string name="pyramid_training_program_name">Pyramid</string>
+    <string name="high_intensity_training_program_name">High Intensity</string>
 </resources>
