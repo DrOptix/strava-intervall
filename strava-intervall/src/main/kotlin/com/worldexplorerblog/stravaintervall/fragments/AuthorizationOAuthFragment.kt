@@ -65,7 +65,7 @@ class AuthorizationOAuthFragment : Fragment() {
                     }
                 }
             }
-        });
+        })
         webView.loadUrl(authorizeUrl)
 
         return layout
