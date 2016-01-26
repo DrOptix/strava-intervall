@@ -24,6 +24,7 @@
     <string name="high_intensity_interval">High</string>
 
     <string name="add_training_interval">Add</string>
+    <string name="edit_training_interval">Edit</string>
 
     <string name="standard_training_program_name">Standard</string>
     <string name="pyramid_training_program_name">Pyramid</string>
