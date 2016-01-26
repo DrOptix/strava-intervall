@@ -26,7 +26,7 @@ class AuthorizationOAuthFragment : Fragment() {
         val webView = layout?.findViewById(R.id.webview) as WebView
 
         var authorizeUrl = "https://www.strava.com/oauth/authorize"
-        authorizeUrl += "?client_id=${getString(R.string.client_id)}}"
+        authorizeUrl += "?client_id=${getString(R.string.client_id)}"
         authorizeUrl += "&response_type=code"
         authorizeUrl += "&redirect_uri=${getString(R.string.callback_domain) + getString(R.string.callback_path)}"
         authorizeUrl += "&scope=write"
