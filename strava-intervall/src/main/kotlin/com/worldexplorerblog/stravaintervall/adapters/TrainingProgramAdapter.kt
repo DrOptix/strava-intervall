@@ -47,15 +47,17 @@ class TrainingProgramAdapter : ArrayAdapter<TrainingProgramModel> {
         }
 
         with(adapterView?.findViewById(R.id.training_program_color_map) as LinearLayout) {
-            for (item in trainingProgramModel.intervals) {
-                val intensityColorCode = View(context)
+            removeAllViews()
 
-                intensityColorCode.layoutParams = LinearLayout.LayoutParams(
+            for (item in trainingProgramModel.intervals) {
+                val intensityColorView = View(context)
+
+                intensityColorView.layoutParams = LinearLayout.LayoutParams(
                         0,
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         1.0f * item.durationInSeconds)
 
-                intensityColorCode.backgroundColor = when (item.intensity) {
+                intensityColorView.backgroundColor = when (item.intensity) {
                     TrainingIntensity.WarmUp -> resources.getColor(R.color.training_interval_warm_up)
                     TrainingIntensity.Low -> resources.getColor(R.color.training_interval_low)
                     TrainingIntensity.Medium -> resources.getColor(R.color.training_interval_medium)
@@ -63,7 +65,7 @@ class TrainingProgramAdapter : ArrayAdapter<TrainingProgramModel> {
                     TrainingIntensity.CoolDown -> resources.getColor(R.color.training_interval_cool_down)
                 }
 
-                addView(intensityColorCode)
+                addView(intensityColorView)
             }
 
             forceLayout()
