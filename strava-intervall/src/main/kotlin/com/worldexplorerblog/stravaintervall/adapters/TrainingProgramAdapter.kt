@@ -81,9 +81,9 @@ class TrainingProgramAdapter : ArrayAdapter<TrainingProgramModel> {
 
         val s = seconds % 60
         val sec = if (s < 9) {
-            "0$m"
+            "0$s"
         } else {
-            "$m"
+            "$s"
         }
 
         return "$min:$sec"
