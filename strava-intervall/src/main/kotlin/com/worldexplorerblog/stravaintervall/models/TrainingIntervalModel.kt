@@ -9,4 +9,4 @@ enum class TrainingIntensity {
 }
 
 data class TrainingIntervalModel(var intensity: TrainingIntensity,
-                                 var durationInSeconds: Long)
+                                 var durationInSeconds: Int)
