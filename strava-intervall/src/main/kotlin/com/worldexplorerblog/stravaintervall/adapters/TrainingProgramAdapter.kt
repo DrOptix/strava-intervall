@@ -11,6 +11,7 @@ import com.worldexplorerblog.stravaintervall.R
 import com.worldexplorerblog.stravaintervall.models.TrainingIntensity
 import com.worldexplorerblog.stravaintervall.models.TrainingProgramModel
 import org.jetbrains.anko.backgroundColor
+import java.util.*
 
 class TrainingProgramAdapter : ArrayAdapter<TrainingProgramModel> {
     constructor(context: Context?,
@@ -19,7 +20,7 @@ class TrainingProgramAdapter : ArrayAdapter<TrainingProgramModel> {
 
     constructor(context: Context?,
                 resource: Int,
-                items: Array<TrainingProgramModel>)
+                items: ArrayList<TrainingProgramModel>)
     : super(context, resource, items)
 
 
