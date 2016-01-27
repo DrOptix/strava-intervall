@@ -2,6 +2,7 @@ package com.worldexplorerblog.stravaintervall.fragments
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.view.*
 import android.widget.ListView
 import com.worldexplorerblog.stravaintervall.R
@@ -56,6 +57,15 @@ class TrainingsListFragment : Fragment() {
                                                        TrainingIntervalModel(TrainingIntensity.High, 15),
                                                        TrainingIntervalModel(TrainingIntensity.CoolDown, 5 * 60)
                                            )))
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        with(activity as AppCompatActivity) {
+            supportActionBar.title = getString(R.string.app_name)
+            supportActionBar.setDisplayHomeAsUpEnabled(false)
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {

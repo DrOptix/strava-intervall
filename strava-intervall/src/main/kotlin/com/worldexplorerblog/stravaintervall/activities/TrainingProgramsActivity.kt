@@ -26,7 +26,7 @@ class TrainingProgramsActivity : AppCompatActivity() {
         val trainingDetailsFragment = TrainingDetailsFragment(trainingModel)
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, trainingDetailsFragment)
-                .addToBackStack("Training")
+                .addToBackStack(null)
                 .commit()
     }
 

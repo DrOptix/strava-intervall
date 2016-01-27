@@ -29,4 +29,6 @@
     <string name="standard_training_program_name">Standard</string>
     <string name="pyramid_training_program_name">Pyramid</string>
     <string name="high_intensity_training_program_name">High Intensity</string>
+
+    <string name="training_details_fragment_title">Training</string>
 </resources>
