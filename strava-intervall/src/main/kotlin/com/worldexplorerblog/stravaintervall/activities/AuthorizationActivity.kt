@@ -29,15 +29,14 @@ class AuthorizationActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.authorization_activity)
 
         try {
             KotlinStrava(storedToken).athlete.get()
             toast(getString(R.string.authorization_success))
 
-            val intent = Intent(this, DashboardActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            val intent = Intent(this, TrainingProgramsActivity::class.java)
             startActivity(intent)
         } catch(ex: ExecutionException) {
             val cause: OAuthNotAuthenticatedException? = ex.cause as OAuthNotAuthenticatedException
@@ -66,8 +65,6 @@ class AuthorizationActivity : FragmentActivity() {
     private fun onAuthorizationSuccess(token: String) {
         storedToken = token
         toast(getString(R.string.authorization_success))
-
-        // TODO: load IntervalManagementActivity
     }
 
     private fun onAuthorizationFail() {
