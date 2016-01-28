@@ -9,20 +9,20 @@ import com.worldexplorerblog.stravaintervall.R
 import com.worldexplorerblog.stravaintervall.adapters.TrainingProgramAdapter
 import com.worldexplorerblog.stravaintervall.models.TrainingIntensity
 import com.worldexplorerblog.stravaintervall.models.TrainingIntervalModel
-import com.worldexplorerblog.stravaintervall.models.TrainingModel
+import com.worldexplorerblog.stravaintervall.models.TrainingPlanModel
 
 class TrainingsListFragment : Fragment() {
-    public var onTrainingSelected: (TrainingModel) -> Unit = { trainingProgram -> /* Do Nothing */ }
+    public var onTrainingSelected: (TrainingPlanModel) -> Unit = { trainingProgram -> /* Do Nothing */ }
     public var onCreateNewTrainingAction: () -> Unit = { /* Do Nothing */ }
 
-    var trainingPrograms = arrayListOf<TrainingModel>()
+    var trainingPrograms = arrayListOf<TrainingPlanModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        trainingPrograms.add(TrainingModel(context.getString(R.string.standard_training_program_name),
-                                           arrayListOf(TrainingIntervalModel(TrainingIntensity.WarmUp, 5 * 60),
+        trainingPrograms.add(TrainingPlanModel(context.getString(R.string.standard_training_program_name),
+                                               arrayListOf(TrainingIntervalModel(TrainingIntensity.WarmUp, 5 * 60),
                                                        TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
                                                        TrainingIntervalModel(TrainingIntensity.Low, 1 * 60),
                                                        TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
@@ -36,8 +36,8 @@ class TrainingsListFragment : Fragment() {
                                                        TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
                                                        TrainingIntervalModel(TrainingIntensity.CoolDown, 5 * 60)
                                            )))
-        trainingPrograms.add(TrainingModel(context.getString(R.string.pyramid_training_program_name),
-                                           arrayListOf(TrainingIntervalModel(TrainingIntensity.WarmUp, 5 * 60),
+        trainingPrograms.add(TrainingPlanModel(context.getString(R.string.pyramid_training_program_name),
+                                               arrayListOf(TrainingIntervalModel(TrainingIntensity.WarmUp, 5 * 60),
                                                        TrainingIntervalModel(TrainingIntensity.High, 15),
                                                        TrainingIntervalModel(TrainingIntensity.Low, 40),
                                                        TrainingIntervalModel(TrainingIntensity.High, 25),
@@ -78,7 +78,7 @@ class TrainingsListFragment : Fragment() {
                                              R.layout.training_program_adapter,
                                              trainingPrograms)
 
-            setOnItemClickListener { parent, view, position, id -> onTrainingSelected(parent.getItemAtPosition(position) as TrainingModel) }
+            setOnItemClickListener { parent, view, position, id -> onTrainingSelected(parent.getItemAtPosition(position) as TrainingPlanModel) }
         }
         return layout
     }

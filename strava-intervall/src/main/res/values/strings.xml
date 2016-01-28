@@ -31,4 +31,7 @@
     <string name="high_intensity_training_program_name">High Intensity</string>
 
     <string name="training_details_fragment_title">Training</string>
+
+    <string name="use_program_button_text">Use program</string>
+    <string name="details">Intervals</string>
 </resources>

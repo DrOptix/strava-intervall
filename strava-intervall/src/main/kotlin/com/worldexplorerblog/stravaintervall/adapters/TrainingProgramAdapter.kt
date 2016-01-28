@@ -9,18 +9,18 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.worldexplorerblog.stravaintervall.R
 import com.worldexplorerblog.stravaintervall.models.TrainingIntensity
-import com.worldexplorerblog.stravaintervall.models.TrainingModel
+import com.worldexplorerblog.stravaintervall.models.TrainingPlanModel
 import org.jetbrains.anko.backgroundColor
 import java.util.*
 
-class TrainingProgramAdapter : ArrayAdapter<TrainingModel> {
+class TrainingProgramAdapter : ArrayAdapter<TrainingPlanModel> {
     constructor(context: Context?,
                 resource: Int)
     : super(context, resource)
 
     constructor(context: Context?,
                 resource: Int,
-                items: ArrayList<TrainingModel>)
+                items: ArrayList<TrainingPlanModel>)
     : super(context, resource, items)
 
 

@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import com.worldexplorerblog.stravaintervall.R
 import com.worldexplorerblog.stravaintervall.fragments.TrainingDetailsFragment
 import com.worldexplorerblog.stravaintervall.fragments.TrainingsListFragment
-import com.worldexplorerblog.stravaintervall.models.TrainingModel
+import com.worldexplorerblog.stravaintervall.models.TrainingPlanModel
 import org.jetbrains.anko.longToast
 
 class TrainingProgramsActivity : AppCompatActivity() {
@@ -22,12 +22,22 @@ class TrainingProgramsActivity : AppCompatActivity() {
                 .commit()
     }
 
-    private fun onTrainingSelected(trainingModel: TrainingModel) {
-        val trainingDetailsFragment = TrainingDetailsFragment(trainingModel)
+    private fun onTrainingSelected(trainingPlan: TrainingPlanModel) {
+        val trainingDetailsFragment = TrainingDetailsFragment(trainingPlan)
+        trainingDetailsFragment.onUseTrainingPlanClick = { trainingPlan -> onUseTrainingPlanClick(trainingPlan) }
+        trainingDetailsFragment.onEditTrainingPlanClick = { trainingPlan -> onEditTrainingPlanClick(trainingPlan) }
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, trainingDetailsFragment)
                 .addToBackStack(null)
                 .commit()
+    }
+
+    private fun onUseTrainingPlanClick(trainingModel: TrainingPlanModel) {
+        longToast("Not implemented yet")
+    }
+
+    private fun onEditTrainingPlanClick(trainingModel: TrainingPlanModel) {
+        longToast("Not implemented yet")
     }
 
     private fun onCreateNewTrainingAction() {
