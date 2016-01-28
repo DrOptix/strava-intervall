@@ -1,12 +1,16 @@
 package com.worldexplorerblog.stravaintervall.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.google.gson.Gson
 import com.worldexplorerblog.stravaintervall.R
 import com.worldexplorerblog.stravaintervall.fragments.TrainingDetailsFragment
 import com.worldexplorerblog.stravaintervall.fragments.TrainingsListFragment
 import com.worldexplorerblog.stravaintervall.models.TrainingPlanModel
+import org.jetbrains.anko.clearTop
 import org.jetbrains.anko.longToast
+import org.jetbrains.anko.newTask
 
 class TrainingProgramsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +37,11 @@ class TrainingProgramsActivity : AppCompatActivity() {
     }
 
     private fun onUseTrainingPlanClick(trainingModel: TrainingPlanModel) {
-        longToast("Not implemented yet")
+        val intent = Intent(applicationContext, TrainingExecutionActivity::class.java);
+        intent.clearTop()
+        intent.newTask()
+        intent.putExtra("training-interval", Gson().toJson(trainingModel));
+        startActivity(intent)
     }
 
     private fun onEditTrainingPlanClick(trainingModel: TrainingPlanModel) {

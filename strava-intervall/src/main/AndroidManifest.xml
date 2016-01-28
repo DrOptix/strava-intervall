@@ -26,5 +26,9 @@
         <activity
             android:name=".activities.TrainingProgramsActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activities.TrainingExecutionActivity"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>
