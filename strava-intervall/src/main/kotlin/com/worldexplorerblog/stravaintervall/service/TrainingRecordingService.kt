@@ -24,7 +24,7 @@ class TrainingRecordingService : Service() {
 
     private var currentIntervalIndex = 0
     private val binder = TrainingRecordingBinder()
-    private val timer = Timer()
+    private var timer = Timer()
     private var textToSpeech: TextToSpeech? = null
 
     public fun startRecording() {
@@ -43,6 +43,7 @@ class TrainingRecordingService : Service() {
     public fun stopRecording() {
         timer.cancel()
         timer.purge()
+        timer = Timer()
     }
 
     override fun onBind(intent: Intent?): IBinder? {

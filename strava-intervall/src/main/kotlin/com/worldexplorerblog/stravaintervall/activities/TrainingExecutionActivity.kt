@@ -13,10 +13,24 @@ import com.worldexplorerblog.stravaintervall.R
 import com.worldexplorerblog.stravaintervall.fragments.TrainingExecutionDetailsFragment
 import com.worldexplorerblog.stravaintervall.models.TrainingPlanModel
 import com.worldexplorerblog.stravaintervall.service.TrainingRecordingService
+import org.jetbrains.anko.alert
 
 class TrainingExecutionActivity : AppCompatActivity() {
 
     private var recordingService: TrainingRecordingService? = null
+
+    private val recordingServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            with(service as TrainingRecordingService.TrainingRecordingBinder) {
+                recordingService = service.getService() as TrainingRecordingService
+                recordingService?.onTimerTick = { onTimerTick() }
+            }
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            // Do Nothing
+        }
+    }
 
     private val trainingPlan by lazy {
         Gson().fromJson(intent.getStringExtra("training-interval"), TrainingPlanModel::class.java)
@@ -25,20 +39,7 @@ class TrainingExecutionActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val intent = Intent(this, TrainingRecordingService::class.java)
-        bindService(intent,
-                    object : ServiceConnection {
-                        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-                            with(service as TrainingRecordingService.TrainingRecordingBinder) {
-                                recordingService = service.getService() as TrainingRecordingService
-                                recordingService?.onTimerTick = { onTimerTick() }
-                            }
-                        }
-
-                        override fun onServiceDisconnected(name: ComponentName?) {
-                            // Do Nothing
-                        }
-                    },
-                    Context.BIND_AUTO_CREATE)
+        bindService(intent, recordingServiceConnection, Context.BIND_AUTO_CREATE)
         startService(intent)
     }
 
@@ -53,6 +54,22 @@ class TrainingExecutionActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, trainingExecutionDetailsFragment)
                 .commit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        unbindService(recordingServiceConnection)
+    }
+
+    override fun onBackPressed() {
+        alert("Give up?", "Do you want to discard the training?") {
+            positiveButton("Discard") {
+                recordingService?.stopRecording()
+                super.onBackPressed()
+            }
+            negativeButton("Cencel") { }
+        }.show()
     }
 
     private fun onStartRecordingClick() {
