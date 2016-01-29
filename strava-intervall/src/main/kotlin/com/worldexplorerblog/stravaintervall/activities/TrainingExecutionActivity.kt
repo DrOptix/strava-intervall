@@ -7,13 +7,17 @@ import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
 import android.support.v7.app.AppCompatActivity
+import android.widget.ImageView
 import android.widget.TextView
 import com.google.gson.Gson
 import com.worldexplorerblog.stravaintervall.R
 import com.worldexplorerblog.stravaintervall.fragments.TrainingExecutionDetailsFragment
+import com.worldexplorerblog.stravaintervall.models.TrainingIntensity
 import com.worldexplorerblog.stravaintervall.models.TrainingPlanModel
 import com.worldexplorerblog.stravaintervall.service.TrainingRecordingService
 import org.jetbrains.anko.alert
+import org.jetbrains.anko.backgroundColor
+import org.jetbrains.anko.onUiThread
 
 class TrainingExecutionActivity : AppCompatActivity() {
 
@@ -83,12 +87,31 @@ class TrainingExecutionActivity : AppCompatActivity() {
     }
 
     private fun onTimerTick() {
-        with(findViewById(R.id.interval_remaining_time_label) as TextView) {
-            text = secondsToMMSS(recordingService?.intervalRemainingSeconds ?: 0)
-        }
+        onUiThread {
+            // Highlight the current interval
+            val index = recordingService?.currentIntervalIndex as Int
+            val limit = trainingPlan?.intervals?.count() as Int
+            if (index < limit) {
+                with(findViewById(R.id.highlight_current_interval) as ImageView) {
+                    backgroundColor = when (trainingPlan
+                            .intervals[recordingService?.currentIntervalIndex as Int]
+                            .intensity) {
+                        TrainingIntensity.WarmUp -> resources.getColor(R.color.training_interval_warm_up)
+                        TrainingIntensity.Low -> resources.getColor(R.color.training_interval_low)
+                        TrainingIntensity.Medium -> resources.getColor(R.color.training_interval_medium)
+                        TrainingIntensity.High -> resources.getColor(R.color.training_interval_high)
+                        TrainingIntensity.CoolDown -> resources.getColor(R.color.training_interval_cool_down)
+                    }
+                }
+            }
 
-        with(findViewById(R.id.elapsed_time_label) as TextView) {
-            text = secondsToHMMSS(recordingService?.trainingElapsedSeconds ?: 0)
+            with(findViewById(R.id.interval_remaining_time_label) as TextView) {
+                text = secondsToMMSS(recordingService?.intervalRemainingSeconds ?: 0)
+            }
+
+            with(findViewById(R.id.elapsed_time_label) as TextView) {
+                text = secondsToHMMSS(recordingService?.trainingElapsedSeconds ?: 0)
+            }
         }
     }
 

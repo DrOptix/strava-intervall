@@ -6,7 +6,6 @@ import android.os.Binder
 import android.os.IBinder
 import android.speech.tts.TextToSpeech
 import com.worldexplorerblog.stravaintervall.models.TrainingIntervalModel
-import org.jetbrains.anko.onUiThread
 import java.util.*
 
 class TrainingRecordingService : Service() {
@@ -20,9 +19,12 @@ class TrainingRecordingService : Service() {
         get
         private set
 
+    public var currentIntervalIndex = 0
+        get
+        private set
+
     public var onTimerTick: () -> Unit = { /* Do Nothing */ }
 
-    private var currentIntervalIndex = 0
     private val binder = TrainingRecordingBinder()
     private var timer = Timer()
     private var textToSpeech: TextToSpeech? = null
@@ -34,8 +36,7 @@ class TrainingRecordingService : Service() {
         timer.schedule(object : TimerTask() {
             override fun run() {
                 processTimerTick()
-                //                showNotification()
-                onUiThread { onTimerTick() }
+                onTimerTick()
             }
         }, 0, 1000)
     }
@@ -48,6 +49,11 @@ class TrainingRecordingService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         return binder
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        textToSpeech?.shutdown()
     }
 
     override fun onCreate() {
