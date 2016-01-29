@@ -61,6 +61,7 @@ class TrainingRecordingService : Service() {
         textToSpeech = TextToSpeech(this, TextToSpeech.OnInitListener {
             textToSpeech?.setLanguage(Locale.UK)
         })
+        textToSpeech?.speak(" ", TextToSpeech.QUEUE_FLUSH, null)
     }
 
     private fun processTimerTick() {
