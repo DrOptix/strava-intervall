@@ -25,16 +25,12 @@ class TrainingRecordingService : Service() {
     private var currentIntervalIndex = 0
     private val binder = TrainingRecordingBinder()
     private val timer = Timer()
-    private val textToSpeech: TextToSpeech by lazy {
-        TextToSpeech(this, TextToSpeech.OnInitListener {
-            textToSpeech.setLanguage(Locale.UK)
-        })
-    }
+    private var textToSpeech: TextToSpeech? = null
 
     public fun startRecording() {
         trainingElapsedSeconds = 0
-        intervalRemainingSeconds = trainingIntervals[currentIntervalIndex].durationInSeconds
-
+        intervalRemainingSeconds = 0
+        currentIntervalIndex = -1
         timer.schedule(object : TimerTask() {
             override fun run() {
                 processTimerTick()
@@ -44,32 +40,45 @@ class TrainingRecordingService : Service() {
         }, 0, 1000)
     }
 
-    public fun stopRecoring() {
-
+    public fun stopRecording() {
+        timer.cancel()
+        timer.purge()
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         return binder
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        textToSpeech = TextToSpeech(this, TextToSpeech.OnInitListener {
+            textToSpeech?.setLanguage(Locale.UK)
+        })
+    }
+
     private fun processTimerTick() {
-        if (intervalRemainingSeconds == trainingIntervals[currentIntervalIndex].durationInSeconds) {
-            speakInterval()
-        } else if (intervalRemainingSeconds == 0) {
+        if (intervalRemainingSeconds == 0) {
             currentIntervalIndex += 1
-            intervalRemainingSeconds = trainingIntervals[currentIntervalIndex].durationInSeconds
-        } else if (currentIntervalIndex == trainingIntervals.count() - 1) {
-            speakGoalAchieved()
+
+            if (currentIntervalIndex < trainingIntervals.count()) {
+                speakInterval()
+                intervalRemainingSeconds = trainingIntervals[currentIntervalIndex].durationInSeconds
+            } else if (currentIntervalIndex == trainingIntervals.count()) {
+                speakGoalAchieved()
+            }
         }
 
-        intervalRemainingSeconds -= 1
         trainingElapsedSeconds += 1
+
+        if (currentIntervalIndex < trainingIntervals.count()) {
+            intervalRemainingSeconds -= 1
+        }
     }
 
     private fun speakGoalAchieved() {
-        textToSpeech.speak("You achieved your goal. You can continue training or conclude your training session.",
-                           TextToSpeech.QUEUE_FLUSH,
-                           null)
+        textToSpeech?.speak("You achieved your goal. You can continue training or conclude your training session.",
+                            TextToSpeech.QUEUE_FLUSH,
+                            null)
     }
 
     private fun speakInterval() {
@@ -90,9 +99,9 @@ class TrainingRecordingService : Service() {
             "$seconds seconds"
         }
 
-        textToSpeech.speak("${currentInterval.intensity.toString()} intensity, $durationString",
-                           TextToSpeech.QUEUE_FLUSH,
-                           null)
+        textToSpeech?.speak("${currentInterval.intensity.toString()} intensity, $durationString",
+                            TextToSpeech.QUEUE_FLUSH,
+                            null)
     }
 
     inner class TrainingRecordingBinder : Binder() {

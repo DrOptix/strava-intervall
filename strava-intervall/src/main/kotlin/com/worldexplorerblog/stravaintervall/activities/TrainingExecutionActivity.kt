@@ -49,6 +49,7 @@ class TrainingExecutionActivity : AppCompatActivity() {
         val trainingExecutionDetailsFragment = TrainingExecutionDetailsFragment()
         trainingExecutionDetailsFragment.trainingPlan = trainingPlan
         trainingExecutionDetailsFragment.onStartRecordingClick = { onStartRecordingClick() }
+        trainingExecutionDetailsFragment.onStopRecordingClick = { onStopRecordingClick() }
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, trainingExecutionDetailsFragment)
                 .commit()
@@ -59,26 +60,31 @@ class TrainingExecutionActivity : AppCompatActivity() {
         recordingService?.startRecording()
     }
 
+    private fun onStopRecordingClick() {
+        // TODO: Show stop warning
+        recordingService?.stopRecording()
+    }
+
     private fun onTimerTick() {
         with(findViewById(R.id.interval_remaining_time_label) as TextView) {
             text = secondsToMMSS(recordingService?.intervalRemainingSeconds ?: 0)
         }
 
-        with(findViewById(R.id.interval_remaining_time_label) as TextView) {
-            text = secondsToHMMSS(recordingService?.intervalRemainingSeconds ?: 0)
+        with(findViewById(R.id.elapsed_time_label) as TextView) {
+            text = secondsToHMMSS(recordingService?.trainingElapsedSeconds ?: 0)
         }
     }
 
     fun secondsToMMSS(seconds: Int): String {
         val m = (seconds / 60).toInt()
-        val min = if (m < 9) {
+        val min = if (m <= 9) {
             "0$m"
         } else {
             "$m"
         }
 
         val s = seconds % 60
-        val sec = if (s < 9) {
+        val sec = if (s <= 9) {
             "0$s"
         } else {
             "$s"

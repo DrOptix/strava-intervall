@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
@@ -17,17 +18,18 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/intensity_label"
+                android:id="@+id/interval_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Medium intensity" />
+                android:text="@string/interval" />
 
             <TextView
                 android:id="@+id/interval_remaining_time_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:00"
-                android:textSize="45sp" />
+                android:textSize="45sp"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
 
         <Space
@@ -42,16 +44,18 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/duration_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/duration" />
+
+            <TextView
                 android:id="@+id/elapsed_time_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Elapsed Time" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="0:00:00"
-                android:textSize="45sp" />
+                android:textSize="45sp"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
     </LinearLayout>
 
@@ -62,11 +66,22 @@
         android:layout_weight="1"
         android:choiceMode="singleChoice" />
 
-    <Button
-        android:id="@+id/start_training_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp"
-        android:text="Start" />
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/start_training_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start" />
+
+        <Button
+            android:id="@+id/stop_training_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stop"
+            android:visibility="gone" />
+    </LinearLayout>
 </LinearLayout>

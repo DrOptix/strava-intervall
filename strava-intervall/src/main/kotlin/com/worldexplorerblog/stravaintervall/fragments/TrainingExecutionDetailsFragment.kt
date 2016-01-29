@@ -14,6 +14,7 @@ class TrainingExecutionDetailsFragment : Fragment() {
     public var trainingPlan: TrainingPlanModel? = null
 
     public var onStartRecordingClick: () -> Unit = { /* Do Nothing */ }
+    public var onStopRecordingClick: () -> Unit = { /* Do Nothing */ }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -21,7 +22,25 @@ class TrainingExecutionDetailsFragment : Fragment() {
         val layout = inflater?.inflate(R.layout.training_execution_details_fragment, container, false)
 
         with(layout?.findViewById(R.id.start_training_button) as Button) {
-            onClick { onStartRecordingClick() }
+            onClick {
+                with(layout?.findViewById(R.id.stop_training_button) as Button) {
+                    visibility = View.VISIBLE
+                }
+
+                visibility = View.GONE
+                onStartRecordingClick()
+            }
+        }
+
+        with(layout?.findViewById(R.id.stop_training_button) as Button) {
+            onClick {
+                with(layout?.findViewById(R.id.start_training_button) as Button) {
+                    visibility = View.VISIBLE
+                }
+
+                visibility = View.GONE
+                onStopRecordingClick()
+            }
         }
 
         return layout
