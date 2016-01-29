@@ -63,7 +63,7 @@ class TrainingExecutionActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        alert("Give up?", "Do you want to discard the training?") {
+        alert(message = "Do you want to discard the training?") {
             positiveButton("Discard") {
                 recordingService?.stopRecording()
                 super.onBackPressed()
