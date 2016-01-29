@@ -23,6 +23,7 @@
                 android:text="Medium intensity" />
 
             <TextView
+                android:id="@+id/interval_remaining_time_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:00"
