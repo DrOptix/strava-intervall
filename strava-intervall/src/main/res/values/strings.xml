@@ -34,4 +34,8 @@
 
     <string name="use_program_button_text">Use program</string>
     <string name="details">Intervals</string>
+    <string name="duration">Duration</string>
+    <string name="interval">Interval</string>
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
 </resources>

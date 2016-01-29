@@ -21,42 +21,53 @@ class TrainingsListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
 
-        trainingPrograms.add(TrainingPlanModel(context.getString(R.string.standard_training_program_name),
-                                               arrayListOf(TrainingIntervalModel(TrainingIntensity.WarmUp, 5 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 1 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 1 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 1 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 1 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 1 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.CoolDown, 5 * 60)
-                                           )))
-        trainingPrograms.add(TrainingPlanModel(context.getString(R.string.pyramid_training_program_name),
-                                               arrayListOf(TrainingIntervalModel(TrainingIntensity.WarmUp, 5 * 60),
-                                                       TrainingIntervalModel(TrainingIntensity.High, 15),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 40),
-                                                       TrainingIntervalModel(TrainingIntensity.High, 25),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 40),
-                                                       TrainingIntervalModel(TrainingIntensity.High, 35),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 40),
-                                                       TrainingIntervalModel(TrainingIntensity.High, 45),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 40),
-                                                       TrainingIntervalModel(TrainingIntensity.High, 55),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 40),
-                                                       TrainingIntervalModel(TrainingIntensity.High, 45),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 40),
-                                                       TrainingIntervalModel(TrainingIntensity.High, 35),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 40),
-                                                       TrainingIntervalModel(TrainingIntensity.High, 25),
-                                                       TrainingIntervalModel(TrainingIntensity.Low, 40),
-                                                       TrainingIntervalModel(TrainingIntensity.High, 15),
-                                                       TrainingIntervalModel(TrainingIntensity.CoolDown, 5 * 60)
-                                           )))
+        trainingPrograms.add(
+                TrainingPlanModel("Test",
+                                  arrayListOf(TrainingIntervalModel(TrainingIntensity.WarmUp, 20),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 10),
+                                              TrainingIntervalModel(TrainingIntensity.Medium, 10),
+                                              TrainingIntervalModel(TrainingIntensity.High, 10),
+                                              TrainingIntervalModel(TrainingIntensity.CoolDown, 10)
+                                  )))
+
+        trainingPrograms.add(
+                TrainingPlanModel(context.getString(R.string.standard_training_program_name),
+                                  arrayListOf(TrainingIntervalModel(TrainingIntensity.WarmUp, 5 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 1 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 1 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 1 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 1 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 1 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.Medium, 1 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.CoolDown, 5 * 60)
+                                  )))
+        trainingPrograms.add(
+                TrainingPlanModel(context.getString(R.string.pyramid_training_program_name),
+                                  arrayListOf(TrainingIntervalModel(TrainingIntensity.WarmUp, 5 * 60),
+                                              TrainingIntervalModel(TrainingIntensity.High, 15),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 40),
+                                              TrainingIntervalModel(TrainingIntensity.High, 25),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 40),
+                                              TrainingIntervalModel(TrainingIntensity.High, 35),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 40),
+                                              TrainingIntervalModel(TrainingIntensity.High, 45),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 40),
+                                              TrainingIntervalModel(TrainingIntensity.High, 55),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 40),
+                                              TrainingIntervalModel(TrainingIntensity.High, 45),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 40),
+                                              TrainingIntervalModel(TrainingIntensity.High, 35),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 40),
+                                              TrainingIntervalModel(TrainingIntensity.High, 25),
+                                              TrainingIntervalModel(TrainingIntensity.Low, 40),
+                                              TrainingIntervalModel(TrainingIntensity.High, 15),
+                                              TrainingIntervalModel(TrainingIntensity.CoolDown, 5 * 60)
+                                  )))
     }
 
     override fun onResume() {

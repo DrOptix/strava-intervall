@@ -1,7 +1,9 @@
 package com.worldexplorerblog.stravaintervall.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import com.google.gson.Gson
 import com.worldexplorerblog.stravaintervall.R
 import com.worldexplorerblog.stravaintervall.fragments.TrainingDetailsFragment
 import com.worldexplorerblog.stravaintervall.fragments.TrainingsListFragment
@@ -33,7 +35,10 @@ class TrainingProgramsActivity : AppCompatActivity() {
     }
 
     private fun onUseTrainingPlanClick(trainingModel: TrainingPlanModel) {
-        longToast("Not implemented yet")
+        val intent = Intent(applicationContext, TrainingExecutionActivity::class.java);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        intent.putExtra("training-interval", Gson().toJson(trainingModel));
+        startActivity(intent)
     }
 
     private fun onEditTrainingPlanClick(trainingModel: TrainingPlanModel) {

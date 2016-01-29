@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.worldexplorerblog.stravaintervall.layouts.CheckableRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?android:attr/listChoiceBackgroundIndicator"
     android:padding="5dp">
 
     <TextView
@@ -30,4 +31,4 @@
         android:layout_height="12dp"
         android:layout_below="@id/time_label"
         tools:ignore="ContentDescription" />
-</RelativeLayout>
+</com.worldexplorerblog.stravaintervall.layouts.CheckableRelativeLayout>
