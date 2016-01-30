@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.gson.Gson
+import com.worldexplorerblog.kotlinstrava.KotlinStrava
 import com.worldexplorerblog.stravaintervall.R
 import com.worldexplorerblog.stravaintervall.fragments.TrainingExecutionDetailsFragment
 import com.worldexplorerblog.stravaintervall.models.TrainingIntensity
@@ -35,6 +36,18 @@ class TrainingExecutionActivity : AppCompatActivity() {
             // Do Nothing
         }
     }
+
+    var storedToken: String
+        get() {
+            return getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
+                    .getString(getString(R.string.token_name), "token")
+        }
+        set(value) {
+            getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE)
+                    .edit()
+                    .putString(getString(R.string.token_name), value)
+                    .commit()
+        }
 
     private val trainingPlan by lazy {
         Gson().fromJson(intent.getStringExtra("training-interval"), TrainingPlanModel::class.java)
@@ -82,8 +95,17 @@ class TrainingExecutionActivity : AppCompatActivity() {
     }
 
     private fun onStopRecordingClick() {
-        // TODO: Show stop warning
-        recordingService?.stopRecording()
+        alert(message = "Do you want to finish the training?") {
+            positiveButton("Discard") {
+                val uploadStatus = KotlinStrava(storedToken).uploadActivity(
+                        data_type = "tcx",
+                        file = "/storage/extSdCard/download/test.tcx")
+
+                recordingService?.stopRecording()
+                // TODO check the upload status and show a report
+            }
+            negativeButton("Cencel") { }
+        }.show()
     }
 
     private fun onTimerTick() {
