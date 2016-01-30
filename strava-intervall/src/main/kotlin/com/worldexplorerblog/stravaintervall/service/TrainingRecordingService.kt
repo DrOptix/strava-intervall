@@ -45,6 +45,7 @@ class TrainingRecordingService : Service() {
     private val listener = object : LocationListener {
         override fun onLocationChanged(location: Location?) {
             if (currentIntervalIndex != -1
+                && currentIntervalIndex < trainingIntervals.count()
                 && isBetterLocation(location as Location, previousBestLocation)) {
                 recordedIntervals[currentIntervalIndex].locations.add(location)
 

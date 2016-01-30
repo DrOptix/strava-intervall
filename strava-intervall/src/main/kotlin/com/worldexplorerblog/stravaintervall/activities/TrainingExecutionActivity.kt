@@ -22,6 +22,7 @@ import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.onUiThread
 import java.io.File
 import java.io.PrintWriter
+import java.text.SimpleDateFormat
 import java.util.*
 
 class TrainingExecutionActivity : AppCompatActivity() {
@@ -184,13 +185,18 @@ class TrainingExecutionActivity : AppCompatActivity() {
             writer.println("<Lap StartTime=\"${recordedIntervals[0].timestamp}\">")
             writer.println("<Track>")
 
+            val dateFormater= SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
             for (location in interval.locations) {
+                writer.println("<Trackpoint>")
+                writer.println("<Time>${dateFormater.format(Date(location.time))}</Time>")
+
                 writer.println("<Position>")
 
                 writer.println("<LatitudeDegrees>${location.latitude}</LatitudeDegrees>")
                 writer.println("<LongitudeDegrees>${location.longitude}</LongitudeDegrees>")
 
                 writer.println("</Position>")
+                writer.println("</Trackpoint>")
             }
 
             writer.println("</Track>")
@@ -200,6 +206,7 @@ class TrainingExecutionActivity : AppCompatActivity() {
         writer.println("</Activity>")
         writer.println("</Activities>")
         writer.println("</TrainingCenterDatabase>")
+        writer.flush()
         writer.close()
     }
 }
