@@ -24,7 +24,7 @@ android {
 
     defaultConfig {
         applicationId "com.worldexplorerblog.stravaintervall"
-        minSdkVersion 14
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -55,4 +55,7 @@ dependencies {
     compile 'org.jetbrains.anko:anko-appcompat-v7:0.8' // For appcompat-v7 bindings
     compile "com.google.code.gson:gson:2.5"
     compile group: 'cz.msebera.android' , name: 'httpclient', version: '4.4.1.1'
+    compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:3.2.0@aar'){
+        transitive=true
+    }
 }
