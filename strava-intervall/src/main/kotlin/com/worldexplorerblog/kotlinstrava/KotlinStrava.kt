@@ -5,6 +5,11 @@ import com.google.gson.Gson
 import com.worldexplorerblog.kotlinstrava.exceptions.OAuthNotAuthenticatedException
 import com.worldexplorerblog.kotlinstrava.models.AthleteDetailed
 import com.worldexplorerblog.kotlinstrava.models.UploadStatus
+import cz.msebera.android.httpclient.client.methods.HttpPost
+import cz.msebera.android.httpclient.entity.mime.MultipartEntityBuilder
+import cz.msebera.android.httpclient.entity.mime.content.FileBody
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient
+import cz.msebera.android.httpclient.util.EntityUtils
 import org.jetbrains.anko.asyncResult
 import java.io.File
 import java.util.concurrent.Future
@@ -33,16 +38,21 @@ class KotlinStrava(token: String) {
         }
     }
 
-    public fun uploadActivity(activity_type: String?,
-                              name: String?,
-                              description: String?,
-                              private: String?,
-                              trainer: String?,
+    public fun uploadActivity(activity_type: String? = null,
+                              name: String? = null,
+                              description: String? = null,
+                              private: String? = null,
+                              trainer: String? = null,
                               data_type: String,
-                              external_id: String?,
+                              external_id: String? = null,
                               file: String): Future<UploadStatus> {
         return asyncResult {
             try {
+
+                //                var request = HttpRequest("https://www.strava.com/api/v3/uploads", "POST")
+                //                        .header("Authorization", "Bearer $token")
+                //                        .header("Content-type", "multipart/form-data")
+
                 val dataMap = mapOf(
                         Pair("activity_type", activity_type),
                         Pair("name", name),
@@ -52,23 +62,20 @@ class KotlinStrava(token: String) {
                         Pair("data_type", data_type),
                         Pair("external_id", external_id))
 
-                var request = HttpRequest("https://www.strava.com/api/v3/uploads", "POST")
-                        .header("Authorization", "Bearer $token")
-                for ((key, value) in dataMap) {
-                    if (value != null) {
-                        request.part(key, value)
-                    }
-                }
-                request.part("file", File(file))
+                val entity = MultipartEntityBuilder.create()
+                        .addTextBody("data_type", data_type)
+                        .addPart("file", FileBody(File(file)))
+                        .build()
 
-                val result = request.body()
+                val request = HttpPost("https://www.strava.com/api/v3/uploads")
+                request.entity = entity
+                request.addHeader("Authorization", "Bearer $token")
 
-                if (!result.toUpperCase().contains("Authorization Error".toUpperCase())) {
-                    gson.fromJson(result, UploadStatus::class.java)
-                } else {
-                    throw OAuthNotAuthenticatedException()
-                }
-            } catch (ex: HttpRequest.HttpRequestException) {
+                val client = DefaultHttpClient()
+                val response = EntityUtils.toString(client.execute(request).entity, "UTF-8")
+
+                Gson().fromJson(response, UploadStatus::class.java)
+            } catch (ex: Exception) {
                 throw ex
             }
         }
