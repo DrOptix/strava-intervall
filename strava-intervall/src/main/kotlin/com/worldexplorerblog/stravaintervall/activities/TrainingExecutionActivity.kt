@@ -4,9 +4,11 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.location.Location
 import android.os.Bundle
 import android.os.IBinder
 import android.support.v7.app.AppCompatActivity
+import android.util.DisplayMetrics
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.gson.Gson
@@ -20,6 +22,8 @@ import com.worldexplorerblog.stravaintervall.service.TrainingRecordingService
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.onUiThread
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
 import java.io.File
 import java.io.PrintWriter
 import java.text.SimpleDateFormat
@@ -80,7 +84,6 @@ class TrainingExecutionActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-
         unbindService(recordingServiceConnection)
     }
 
@@ -118,9 +121,38 @@ class TrainingExecutionActivity : AppCompatActivity() {
         }.show()
     }
 
+    private fun computeNiceZoom(location: Location): Double {
+        // Location accuracy diameter (in meters)
+        val accuracy = location.accuracy * 2
+
+        // Screen measurements
+        val metrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(metrics)
+
+        // Use min(width, height) (to properly fit the screen
+        val screenSize = Math.min(metrics.widthPixels, metrics.heightPixels)
+
+        // Equators length
+        val equator = 40075004
+
+        // The meters per pixel required to show the whole area the user might be located in
+        val requiredMpp = accuracy / screenSize
+
+        // Calculate the zoom level
+        val zoomLevel = Math.log(equator / (256.0 * requiredMpp)) / Math.log(2.0) + 1
+        return zoomLevel
+    }
+
     private fun onTimerTick() {
         onUiThread {
             // Highlight the current interval
+            if (recordingService?.previousBestLocation != null) {
+                with(findViewById(R.id.map_view) as MapView) {
+                    controller.setCenter(GeoPoint(recordingService?.previousBestLocation))
+                    controller.setZoom(computeNiceZoom(recordingService?.previousBestLocation as Location).toInt())
+                }
+            }
+
             val index = recordingService?.currentIntervalIndex as Int
             val limit = trainingPlan?.intervals?.count() as Int
             if (index < limit) {
@@ -185,7 +217,7 @@ class TrainingExecutionActivity : AppCompatActivity() {
             writer.println("<Lap StartTime=\"${recordedIntervals[0].timestamp}\">")
             writer.println("<Track>")
 
-            val dateFormater= SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+            val dateFormater = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
             for (location in interval.locations) {
                 writer.println("<Trackpoint>")
                 writer.println("<Time>${dateFormater.format(Date(location.time))}</Time>")

@@ -73,7 +73,7 @@
         android:orientation="horizontal"
         tools:ignore="ContentDescription" />
 
-    <FrameLayout
+    <org.osmdroid.views.MapView
         android:id="@+id/map_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"

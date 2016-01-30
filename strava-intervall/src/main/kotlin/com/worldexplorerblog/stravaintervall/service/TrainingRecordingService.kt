@@ -44,13 +44,16 @@ class TrainingRecordingService : Service() {
 
     private val listener = object : LocationListener {
         override fun onLocationChanged(location: Location?) {
-            if (currentIntervalIndex != -1
-                && currentIntervalIndex < trainingIntervals.count()
-                && isBetterLocation(location as Location, previousBestLocation)) {
-                recordedIntervals[currentIntervalIndex].locations.add(location)
+            if (isRecording && location != null) {
+                if (currentIntervalIndex != -1
+                    && currentIntervalIndex < trainingIntervals.count()) {
+                    recordedIntervals[currentIntervalIndex].locations.add(location)
 
-                previousBestLocation = location
+                } else if (currentIntervalIndex < trainingIntervals.count()) {
+                    recordedIntervals[currentIntervalIndex + 1].locations.add(location)
+                }
             }
+            previousBestLocation = location
         }
 
         override fun onProviderDisabled(provider: String?) {
@@ -64,9 +67,15 @@ class TrainingRecordingService : Service() {
     }
 
     var locationManager: LocationManager? = null
-    var previousBestLocation: Location? = null
+    public var previousBestLocation: Location? = null
+        get
+        private set
+
+    private var isRecording: Boolean = false
 
     public fun startRecording() {
+        isRecording = true
+
         recordedIntervals.clear()
         trainingIntervals.forEach {
             recordedIntervals.add(RecordedIntervalModel(timeStamp(), ArrayList<Location>()))
@@ -83,6 +92,7 @@ class TrainingRecordingService : Service() {
     }
 
     public fun stopRecording() {
+        isRecording = false
         timer.cancel()
         timer.purge()
         timer = Timer()
@@ -121,6 +131,8 @@ class TrainingRecordingService : Service() {
                 recordedIntervals[currentIntervalIndex].timestamp = timeStamp()
             } else if (currentIntervalIndex == trainingIntervals.count()) {
                 speakGoalAchieved()
+                // Add the continuation interval
+                recordedIntervals.add(RecordedIntervalModel(timeStamp(), ArrayList<Location>()))
             }
         }
 

@@ -4,6 +4,7 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.2.3'
@@ -16,6 +17,7 @@ apply plugin: 'kotlin-android'
 repositories {
     jcenter()
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 android {
@@ -54,6 +56,7 @@ dependencies {
     compile 'org.jetbrains.anko:anko-support-v4:0.8' // In case you need support-v4 bindings
     compile 'org.jetbrains.anko:anko-appcompat-v7:0.8' // For appcompat-v7 bindings
     compile "com.google.code.gson:gson:2.5"
-    compile group: 'cz.msebera.android' , name: 'httpclient', version: '4.4.1.1'
+    compile group: 'cz.msebera.android', name: 'httpclient', version: '4.4.1.1'
     compile 'org.osmdroid:osmdroid-android:5.0.1@aar'
+    compile 'com.github.MKergall.osmbonuspack:OSMBonusPack:v5.7'
 }
