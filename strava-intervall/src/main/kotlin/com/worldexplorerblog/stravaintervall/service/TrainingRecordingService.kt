@@ -1,16 +1,20 @@
 package com.worldexplorerblog.stravaintervall.service
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Binder
+import android.os.Bundle
 import android.os.IBinder
 import android.speech.tts.TextToSpeech
 import com.worldexplorerblog.stravaintervall.models.TrainingIntervalModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class RecordedIntervalModel(val timestamp: String,
+data class RecordedIntervalModel(var timestamp: String,
                                  val locations: ArrayList<Location>)
 
 class TrainingRecordingService : Service() {
@@ -28,7 +32,7 @@ class TrainingRecordingService : Service() {
         get
         private set
 
-    public var currentIntervalIndex = 0
+    public var currentIntervalIndex = -1
         get
         private set
 
@@ -38,10 +42,37 @@ class TrainingRecordingService : Service() {
     private var timer = Timer()
     private var textToSpeech: TextToSpeech? = null
 
+    private val listener = object : LocationListener {
+        override fun onLocationChanged(location: Location?) {
+            if (currentIntervalIndex != -1
+                && isBetterLocation(location as Location, previousBestLocation)) {
+                recordedIntervals[currentIntervalIndex].locations.add(location)
+
+                previousBestLocation = location
+            }
+        }
+
+        override fun onProviderDisabled(provider: String?) {
+        }
+
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+        }
+
+        override fun onProviderEnabled(provider: String?) {
+        }
+    }
+
+    var locationManager: LocationManager? = null
+    var previousBestLocation: Location? = null
+
     public fun startRecording() {
+        recordedIntervals.clear()
+        trainingIntervals.forEach {
+            recordedIntervals.add(RecordedIntervalModel(timeStamp(), ArrayList<Location>()))
+        }
+
         trainingElapsedSeconds = 0
         intervalRemainingSeconds = 0
-        currentIntervalIndex = -1
         timer.schedule(object : TimerTask() {
             override fun run() {
                 processTimerTick()
@@ -63,6 +94,7 @@ class TrainingRecordingService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         textToSpeech?.shutdown()
+        locationManager?.removeUpdates(listener);
     }
 
     override fun onCreate() {
@@ -71,6 +103,10 @@ class TrainingRecordingService : Service() {
             textToSpeech?.setLanguage(Locale.UK)
         })
         textToSpeech?.speak(" ", TextToSpeech.QUEUE_FLUSH, null)
+
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        //        locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 5.0f, listener)
+        locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 5.0f, listener)
     }
 
     private fun processTimerTick() {
@@ -81,8 +117,7 @@ class TrainingRecordingService : Service() {
                 speakInterval()
                 intervalRemainingSeconds = trainingIntervals[currentIntervalIndex].durationInSeconds
 
-                recordedIntervals.add(
-                        RecordedIntervalModel(timeStamp(), ArrayList<Location>()))
+                recordedIntervals[currentIntervalIndex].timestamp = timeStamp()
             } else if (currentIntervalIndex == trainingIntervals.count()) {
                 speakGoalAchieved()
             }
@@ -128,12 +163,63 @@ class TrainingRecordingService : Service() {
         val timezone = TimeZone.getTimeZone("UTC")
         val calendar = Calendar.getInstance(timezone)
 
-        val formatter = SimpleDateFormat("YYYY-MM-DDTHH:mm:ss z")
+        val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
         formatter.calendar = calendar
         formatter.timeZone = timezone
 
         val timestamp = formatter.format(calendar.time)
         return timestamp
+    }
+
+    private fun isBetterLocation(location: Location, currentBestLocation: Location?): Boolean {
+        if (currentBestLocation == null) {
+            // A new location is always better than no location
+            return true
+        }
+
+        // Check whether the new location fix is newer or older
+        val oneSecond = 1000
+
+        val timeDelta = location.time - currentBestLocation.time
+        val isSignificantlyNewer = timeDelta > oneSecond
+        val isSignificantlyOlder = timeDelta < -oneSecond
+        val isNewer = timeDelta > 0
+
+        // If it's been more than two minutes since the current location, use the new location
+        // because the user has likely moved
+        if (isSignificantlyNewer) {
+            return true
+            // If the new location is more than two minutes older, it must be worse
+        } else if (isSignificantlyOlder) {
+            return false
+        }
+
+        // Check whether the new location fix is more or less accurate
+        val accuracyDelta = (location.accuracy - currentBestLocation.accuracy).toInt()
+        val isLessAccurate = accuracyDelta > 0
+        val isMoreAccurate = accuracyDelta < 0
+        val isSignificantlyLessAccurate = accuracyDelta > 200
+
+        // Check if the old and new location are from the same provider
+        val isFromSameProvider = isSameProvider(location.provider,
+                                                currentBestLocation.provider)
+
+        // Determine location quality using a combination of timeliness and accuracy
+        if (isMoreAccurate) {
+            return true
+        } else if (isNewer && !isLessAccurate) {
+            return true
+        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+            return true
+        }
+        return false
+    }
+
+    private fun isSameProvider(provider1: String?, provider2: String?): Boolean {
+        if (provider1 == null) {
+            return provider2 == null;
+        }
+        return provider1.equals(provider2);
     }
 
     inner class TrainingRecordingBinder : Binder() {
