@@ -81,6 +81,7 @@ class TrainingRecordingService : Service() {
             recordedIntervals.add(RecordedIntervalModel(timeStamp(), ArrayList<Location>()))
         }
 
+        currentIntervalIndex = -1
         trainingElapsedSeconds = 0
         intervalRemainingSeconds = 0
         timer.schedule(object : TimerTask() {

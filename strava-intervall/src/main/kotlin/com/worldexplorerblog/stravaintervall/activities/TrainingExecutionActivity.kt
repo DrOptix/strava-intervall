@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.IBinder
@@ -22,8 +23,10 @@ import com.worldexplorerblog.stravaintervall.service.TrainingRecordingService
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.onUiThread
+import org.osmdroid.api.IGeoPoint
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.PathOverlay
 import java.io.File
 import java.io.PrintWriter
 import java.text.SimpleDateFormat
@@ -143,13 +146,26 @@ class TrainingExecutionActivity : AppCompatActivity() {
         return zoomLevel
     }
 
+    val waypoints: ArrayList<GeoPoint>? = ArrayList()
+
     private fun onTimerTick() {
         onUiThread {
-            // Highlight the current interval
+            // Highlight the current interval1
             if (recordingService?.previousBestLocation != null) {
+                waypoints?.add(GeoPoint(recordingService?.previousBestLocation?.latitude as Double,
+                                        recordingService?.previousBestLocation?.longitude as Double))
+
                 with(findViewById(R.id.map_view) as MapView) {
+                    val roadOverlay = PathOverlay(Color.RED, context)
+                    val paint = roadOverlay.paint
+                    paint.strokeWidth = 5.0f
+                    roadOverlay.paint = paint
+                    roadOverlay.addPoints(waypoints as List<IGeoPoint>?)
+                    overlays.add(roadOverlay)
                     controller.setCenter(GeoPoint(recordingService?.previousBestLocation))
                     controller.setZoom(computeNiceZoom(recordingService?.previousBestLocation as Location).toInt())
+
+                    invalidate()
                 }
             }
 
