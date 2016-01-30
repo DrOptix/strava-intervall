@@ -15,10 +15,14 @@ import com.worldexplorerblog.stravaintervall.R
 import com.worldexplorerblog.stravaintervall.fragments.TrainingExecutionDetailsFragment
 import com.worldexplorerblog.stravaintervall.models.TrainingIntensity
 import com.worldexplorerblog.stravaintervall.models.TrainingPlanModel
+import com.worldexplorerblog.stravaintervall.service.RecordedIntervalModel
 import com.worldexplorerblog.stravaintervall.service.TrainingRecordingService
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.backgroundColor
 import org.jetbrains.anko.onUiThread
+import java.io.File
+import java.io.PrintWriter
+import java.util.*
 
 class TrainingExecutionActivity : AppCompatActivity() {
 
@@ -95,11 +99,16 @@ class TrainingExecutionActivity : AppCompatActivity() {
     }
 
     private fun onStopRecordingClick() {
-        alert(message = "Do you want to finish the training?") {
-            positiveButton("Discard") {
+        alert(message = "Do you want to finish and upload to Strava?") {
+            positiveButton("Upload") {
+                // TODO ask to discard if no location data in present
+
+                val outputFile = File.createTempFile("upload", "tcx", baseContext.cacheDir)
+                exportTcx(outputFile, recordingService?.recordedIntervals as ArrayList<RecordedIntervalModel>)
+
                 val uploadStatus = KotlinStrava(storedToken).uploadActivity(
                         data_type = "tcx",
-                        file = "/storage/extSdCard/download/test.tcx")
+                        file = outputFile.absolutePath)
 
                 recordingService?.stopRecording()
                 // TODO check the upload status and show a report
@@ -159,6 +168,39 @@ class TrainingExecutionActivity : AppCompatActivity() {
         val h = (seconds / 3600).toInt()
         val mmss = secondsToMMSS(seconds % 3600)
         return "$h:$mmss"
+    }
+
+    private fun exportTcx(file: File, recordedIntervals: ArrayList<RecordedIntervalModel>) {
+        val writer = PrintWriter(file)
+        writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+
+        writer.println("<TrainingCenterDatabase xsi:schemaLocation=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2 http://www.garmin.com/xmlschemas/TrainingCenterDatabasev2.xsd\" xmlns:ns5=\"http://www.garmin.com/xmlschemas/ActivityGoals/v1\" xmlns:ns3=\"http://www.garmin.com/xmlschemas/ActivityExtension/v2\" xmlns:ns2=\"http://www.garmin.com/xmlschemas/UserProfile/v2\" xmlns=\"http://www.garmin.com/xmlschemas/TrainingCenterDatabase/v2\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">")
+        writer.println("<Activities>")
+        writer.println("<Activity Sport=\"Running\">")
+
+        writer.println("<Id>${recordedIntervals[0].timestamp}</Id>")
+
+        for (interval in recordedIntervals) {
+            writer.println("<Lap StartTime=\"${recordedIntervals[0].timestamp}\">")
+            writer.println("<Track>")
+
+            for (location in interval.locations) {
+                writer.println("<Position>")
+
+                writer.println("<LatitudeDegrees>${location.latitude}</LatitudeDegrees>")
+                writer.println("<LongitudeDegrees>${location.longitude}</LongitudeDegrees>")
+
+                writer.println("</Position>")
+            }
+
+            writer.println("</Track>")
+            writer.println("</Lap>")
+        }
+
+        writer.println("</Activity>")
+        writer.println("</Activities>")
+        writer.println("</TrainingCenterDatabase>")
+        writer.close()
     }
 }
 

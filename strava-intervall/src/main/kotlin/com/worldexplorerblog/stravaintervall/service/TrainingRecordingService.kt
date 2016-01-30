@@ -2,14 +2,23 @@ package com.worldexplorerblog.stravaintervall.service
 
 import android.app.Service
 import android.content.Intent
+import android.location.Location
 import android.os.Binder
 import android.os.IBinder
 import android.speech.tts.TextToSpeech
 import com.worldexplorerblog.stravaintervall.models.TrainingIntervalModel
+import java.text.SimpleDateFormat
 import java.util.*
+
+data class RecordedIntervalModel(val timestamp: String,
+                                 val locations: ArrayList<Location>)
 
 class TrainingRecordingService : Service() {
     public var trainingIntervals = emptyList<TrainingIntervalModel>().toArrayList()
+
+    public var recordedIntervals = emptyList<RecordedIntervalModel>().toArrayList()
+        get
+        private set
 
     public var intervalRemainingSeconds = 0
         get
@@ -71,6 +80,9 @@ class TrainingRecordingService : Service() {
             if (currentIntervalIndex < trainingIntervals.count()) {
                 speakInterval()
                 intervalRemainingSeconds = trainingIntervals[currentIntervalIndex].durationInSeconds
+
+                recordedIntervals.add(
+                        RecordedIntervalModel(timeStamp(), ArrayList<Location>()))
             } else if (currentIntervalIndex == trainingIntervals.count()) {
                 speakGoalAchieved()
             }
@@ -110,6 +122,18 @@ class TrainingRecordingService : Service() {
         textToSpeech?.speak("${currentInterval.intensity.toString()} intensity, $durationString",
                             TextToSpeech.QUEUE_FLUSH,
                             null)
+    }
+
+    private fun timeStamp(): String {
+        val timezone = TimeZone.getTimeZone("UTC")
+        val calendar = Calendar.getInstance(timezone)
+
+        val formatter = SimpleDateFormat("YYYY-MM-DDTHH:mm:ss z")
+        formatter.calendar = calendar
+        formatter.timeZone = timezone
+
+        val timestamp = formatter.format(calendar.time)
+        return timestamp
     }
 
     inner class TrainingRecordingBinder : Binder() {
