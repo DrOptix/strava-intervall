@@ -34,10 +34,7 @@ class AuthorizationActivity : FragmentActivity() {
 
         try {
             KotlinStrava(storedToken).athlete.get()
-            toast(getString(R.string.authorization_success))
-
-            val intent = Intent(this, TrainingProgramsActivity::class.java)
-            startActivity(intent)
+            startMainActivity()
         } catch(ex: ExecutionException) {
             val cause: OAuthNotAuthenticatedException? = ex.cause as OAuthNotAuthenticatedException
             if (cause?.javaClass?.isInstance(OAuthNotAuthenticatedException()) as Boolean) {
@@ -64,7 +61,7 @@ class AuthorizationActivity : FragmentActivity() {
 
     private fun onAuthorizationSuccess(token: String) {
         storedToken = token
-        toast(getString(R.string.authorization_success))
+        startMainActivity()
     }
 
     private fun onAuthorizationFail() {
@@ -75,6 +72,13 @@ class AuthorizationActivity : FragmentActivity() {
         supportFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, messageFragment)
                 .commit()
+    }
+
+    private fun startMainActivity() {
+        toast(getString(R.string.authorization_success))
+
+        val intent = Intent(this, TrainingProgramsActivity::class.java)
+        startActivity(intent)
     }
 
 }
