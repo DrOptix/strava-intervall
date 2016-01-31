@@ -95,12 +95,13 @@ class TrainingExecutionActivity : AppCompatActivity() {
             alert(message = "Do you want to discard the training?") {
                 positiveButton("Discard") {
                     recordingService?.stopRecording()
+                    super.onBackPressed()
                 }
                 negativeButton("Cencel") { }
             }.show()
+        } else {
+            super.onBackPressed()
         }
-
-        super.onBackPressed()
     }
 
     private fun onStartRecordingClick() {
