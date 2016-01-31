@@ -1,6 +1,6 @@
 
 # API key
-strava-intervall/src/main/res/values/strava_api_key.xml
+strava-intervall/src/main/res/values/api_key.xml
 
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion,
 # Android Studio and Webstorm
