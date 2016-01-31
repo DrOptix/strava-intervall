@@ -46,7 +46,7 @@ class TrainingRecordingService : Service() {
         override fun onLocationChanged(location: Location?) {
             if (isRecording && location != null) {
                 if (currentIntervalIndex != -1
-                    && currentIntervalIndex < trainingIntervals.count()) {
+                        && currentIntervalIndex < trainingIntervals.count()) {
                     recordedIntervals[currentIntervalIndex].locations.add(location)
 
                 } else if (currentIntervalIndex < trainingIntervals.count()) {
@@ -71,7 +71,9 @@ class TrainingRecordingService : Service() {
         get
         private set
 
-    private var isRecording: Boolean = false
+    public var isRecording: Boolean = false
+        get
+        private set
 
     public fun startRecording() {
         isRecording = true
@@ -146,8 +148,8 @@ class TrainingRecordingService : Service() {
 
     private fun speakGoalAchieved() {
         textToSpeech?.speak("You achieved your goal. You can continue training or conclude your training session.",
-                            TextToSpeech.QUEUE_FLUSH,
-                            null)
+                TextToSpeech.QUEUE_FLUSH,
+                null)
     }
 
     private fun speakInterval() {
@@ -169,8 +171,8 @@ class TrainingRecordingService : Service() {
         }
 
         textToSpeech?.speak("${currentInterval.intensity.toString()} intensity, $durationString",
-                            TextToSpeech.QUEUE_FLUSH,
-                            null)
+                TextToSpeech.QUEUE_FLUSH,
+                null)
     }
 
     private fun timeStamp(): String {
@@ -216,7 +218,7 @@ class TrainingRecordingService : Service() {
 
         // Check if the old and new location are from the same provider
         val isFromSameProvider = isSameProvider(location.provider,
-                                                currentBestLocation.provider)
+                currentBestLocation.provider)
 
         // Determine location quality using a combination of timeliness and accuracy
         if (isMoreAccurate) {

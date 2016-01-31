@@ -91,13 +91,16 @@ class TrainingExecutionActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        alert(message = "Do you want to discard the training?") {
-            positiveButton("Discard") {
-                recordingService?.stopRecording()
-                super.onBackPressed()
-            }
-            negativeButton("Cencel") { }
-        }.show()
+        if (recordingService?.isRecording as Boolean) {
+            alert(message = "Do you want to discard the training?") {
+                positiveButton("Discard") {
+                    recordingService?.stopRecording()
+                }
+                negativeButton("Cencel") { }
+            }.show()
+        }
+
+        super.onBackPressed()
     }
 
     private fun onStartRecordingClick() {
@@ -153,7 +156,7 @@ class TrainingExecutionActivity : AppCompatActivity() {
             // Highlight the current interval1
             if (recordingService?.previousBestLocation != null) {
                 waypoints?.add(GeoPoint(recordingService?.previousBestLocation?.latitude as Double,
-                                        recordingService?.previousBestLocation?.longitude as Double))
+                        recordingService?.previousBestLocation?.longitude as Double))
 
                 with(findViewById(R.id.map_view) as MapView) {
                     val roadOverlay = PathOverlay(Color.RED, context)
